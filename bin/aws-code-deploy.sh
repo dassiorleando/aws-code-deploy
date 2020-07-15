@@ -329,6 +329,7 @@ fi
 
 # ----- Application Source -----
 h1 "Step 6: Checking Application Source"
+AWS_CODE_DEPLOY_EXCLUDES=${AWS_CODE_DEPLOY_EXCLUDES:-nothing-to-exclude.extension}
 AWS_CODE_DEPLOY_APP_BUNDLE_TYPE=${AWS_CODE_DEPLOY_APP_BUNDLE_TYPE:-zip}
 APP_SOURCE=$(readlink -f "${AWS_CODE_DEPLOY_APP_SOURCE:-.}")
 
@@ -366,7 +367,7 @@ if [ -d "$APP_SOURCE" ]; then
                "Unable to compress \"$APP_SOURCE\""
     BUNDLE_TYPE="tgz"
   else  ## defaults to zip
-    runCommand "cd \"$APP_SOURCE\" && zip -rq \"${APP_LOCAL_TEMP_FILE}\" ." \
+    runCommand "cd \"$APP_SOURCE\" && zip -rq \"${APP_LOCAL_TEMP_FILE}\" . -x $AWS_CODE_DEPLOY_EXCLUDES" \
                "Unable to compress \"$APP_SOURCE\""
     BUNDLE_TYPE="zip"
   fi

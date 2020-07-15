@@ -130,6 +130,7 @@ Environment variables are used to control the deployment actions. A brief summar
 | `AWS_CODE_DEPLOY_S3_BUCKET`                       | **Yes**  | The name of the S3 bucket to deploy the revision |
 | `AWS_CODE_DEPLOY_S3_KEY_PREFIX`                   | No       | A prefix to use for the revision bucket key |
 | `AWS_CODE_DEPLOY_S3_FILENAME`                     | **Yes**  | The destination name within S3. |
+| `AWS_CODE_DEPLOY_EXCLUDES`                        | No       | The files and folders patterns to exclude from the final archive. |
 | `AWS_CODE_DEPLOY_S3_LIMIT_BUCKET_FILES`           | No       | Number of revisions to limit. If 0, unlimited. Default = `0` |
 | `AWS_CODE_DEPLOY_S3_SSE`                          | No       | If specified and `true` will ensure the CodeDeploy archive is stored in S3 with Server Side Encryption (SSE) |
 | `AWS_CODE_DEPLOY_REVISION_DESCRIPTION`            | No       | A description that is stored within AWS Code Deploy that stores information about the specific revision |
@@ -326,6 +327,7 @@ Environment Variables:
 
 * `AWS_CODE_DEPLOY_APP_SOURCE` (required): Specifies the root source contents of the application. The `appspec.yml` should exist within this directory. If not specified, the script will use the current working directory.
 * `AWS_CODE_DEPLOY_S3_FILENAME` (required): The destination name within S3. Note that this should **not** include any prefix keys as these are defined elsewhere. A recommended good practice would be to use a combination of the CI build number with the git short revision. (e.g. "100#c3a5fea.zip")
+* `AWS_CODE_DEPLOY_EXCLUDES` (optional): Specifies the files and folders to exclude, for now it works for zip method only.
 
 #### Step 7: [Pushing to S3](http://docs.aws.amazon.com/cli/latest/reference/deploy/push.html)
 
@@ -342,6 +344,7 @@ Environment Variables:
   AWS_CODE_DEPLOY_S3_BUCKET="my-bucket-test"
   AWS_CODE_DEPLOY_S3_KEY_PREFIX="production-www"
   AWS_CODE_DEPLOY_S3_FILENAME="100#c3a5fea.zip"
+  AWS_CODE_DEPLOY_EXCLUDES=".git/\* node_modules/\* file.extension"
 
   # The resulting stored file would exist at s3://my-bucket-test/production-www/100#c3a5fea.zip
   ```
